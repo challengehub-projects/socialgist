@@ -4,12 +4,13 @@ import WelcomePage from "./pages/welcome";
 import SignupPage from "./pages/signup";
 import LoginPage from "./pages/login";
 import HomeFeedPage from "./pages/feed";
-import TopNavbar from "./pages/navbar";
+import TopNavbar from "./pages/trash/navbar";
 import PostFeedStream from "./pages/feed";
 import TermsOfServicePage from "./pages/terms";
 import MessagesPage from "./pages/messeges";
 import NotificationsPage from "./pages/notifications";
 import ProfilePage from "./pages/profile";
+import PostEditor from "./pages/postEditor";
 
 // Wrapper to map your old custom 'onNavigate' function properties directly to React Router paths
 function RouterViewWrapper({ Component }) {
@@ -67,6 +68,16 @@ export default function App() {
             }
           />
 
+            <Route
+            path="/post"
+            element={
+              <>
+              <TopNavbar />
+              <PostEditor />
+              </>
+            }
+          />
+
           <Route
             path="/notifications"
             element={
@@ -83,7 +94,7 @@ export default function App() {
             element={
               <>
                 <TopNavbar />
-                <HomeFeedPage />
+                <PostFeedStream />
               </>
             }
           />
