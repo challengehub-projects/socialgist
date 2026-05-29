@@ -41,7 +41,7 @@ export default function PostEditor() {
         text: "Tap to edit",
         x: 100,
         y: 150,
-        fontSize: 34,
+        fontSize: 30,
         color: "#fff",
       },
     ]);
@@ -61,7 +61,7 @@ export default function PostEditor() {
         text: emojiData.emoji,
         x: 120 + Math.random() * 50,
         y: 180 + Math.random() * 50,
-        fontSize: 34, // small emoji
+        fontSize: 20, // small emoji
       },
     ]);
   };

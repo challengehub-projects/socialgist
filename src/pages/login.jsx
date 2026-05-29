@@ -1,285 +1,205 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+
 import {
   Mail,
   Lock,
-  Sparkles,
-  ArrowRight,
   Eye,
   EyeOff,
- MessageSquare,
-  Flame,
-  GraduationCap
-} from 'lucide-react';
+  ArrowRight,
+} from "lucide-react";
 
-import { supabase } from '../configs/supbase';
+import { supabase } from "../configs/supbase";
 
 export default function LoginPage({ onNavigate }) {
+
   const [showPassword, setShowPassword] = useState(false);
 
-  // ================= STATES =================
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   // ================= LOGIN =================
+
   const handleLogin = async (e) => {
+
     e.preventDefault();
 
     if (loading) return;
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
 
-      // SUCCESS
-      onNavigate('feed');
+      onNavigate("feed");
 
     } catch (err) {
-      console.log(err);
 
-      if (err.message.includes('Invalid login credentials')) {
-        setError('Incorrect email or password');
-      } else {
-        setError(err.message || 'Login failed');
-      }
+      setError(err.message || "Unable to login");
 
     } finally {
+
       setLoading(false);
+
     }
   };
 
   return (
-    <div className="min-h-screen bg-purple-50 text-purple-950 flex font-sans antialiased selection:bg-purple-600 selection:text-white">
+    <div className="min-h-screen bg-[#faf7ff] flex items-center justify-center px-5 py-10 overflow-hidden relative">
 
-      {/* LEFT SIDE: FORM CONTAINER */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 md:p-20 bg-purple-50">
+      {/* BACKGROUND GLOW */}
+      <div className="absolute top-[-100px] right-[-100px] w-[250px] h-[250px] bg-purple-300/30 blur-3xl rounded-full" />
 
-        <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-3xl border border-purple-100 shadow-xl shadow-purple-200/20 flex flex-col relative overflow-hidden">
+      <div className="absolute bottom-[-100px] left-[-100px] w-[250px] h-[250px] bg-fuchsia-300/20 blur-3xl rounded-full" />
 
-          {/* Decorative Blur */}
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-purple-200 rounded-full blur-3xl opacity-60 pointer-events-none" />
-          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-fuchsia-200 rounded-full blur-3xl opacity-60 pointer-events-none" />
+      {/* CARD */}
+      <div className="relative z-10 w-full max-w-md bg-white/90 backdrop-blur-xl border border-purple-100 rounded-[32px] shadow-2xl shadow-purple-200/40 p-7">
 
-          {/* HEADER */}
-          <div className="flex flex-col items-center mb-8 relative z-10">
+        {/* LOGO */}
+        <div className="flex flex-col items-center text-center mb-8">
 
-            <button
-              onClick={() => onNavigate('welcome')}
-              className="h-12 w-12 rounded-2xl bg-purple-600 flex items-center justify-center text-white shadow-md shadow-purple-200 mb-4 hover:opacity-90 transition-opacity"
-            >
-              <img src="/icon.png" alt="Logo" />
-            </button>
+          <div className="w-20 h-20 rounded-[28px] bg-gradient-to-br from-purple-600 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-purple-300/40 mb-5">
 
-            <h2 className="text-2xl font-bold tracking-tight text-purple-950">
-              Welcome back
-            </h2>
+            <img
+              src="/icon.png"
+              alt="logo"
+              className="w-10 h-10"
+            />
 
-            <p className="text-sm text-purple-400 mt-1">
-              Catch up on the latest campus tea
-            </p>
           </div>
 
-          {/* FORM */}
-          <form onSubmit={handleLogin} className="space-y-5 relative z-10">
+          <h1 className="text-3xl font-black tracking-tight text-purple-950">
+            Welcome Back
+          </h1>
 
-            {/* EMAIL */}
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-purple-500/80 mb-2">
-                Campus Email or Phone
-              </label>
+          <p className="text-sm text-purple-500 mt-2 leading-6 max-w-xs">
+            Sign in to continue exploring campus conversations,
+            confessions and trending gists.
+          </p>
 
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-purple-300">
-                  <Mail className="h-4 w-4" />
-                </span>
+        </div>
 
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@university.edu"
-                  className="w-full pl-11 pr-4 py-3 bg-purple-50/50 border border-purple-100 rounded-2xl text-sm focus:outline-none focus:border-purple-500 focus:bg-white focus:ring-4 focus:ring-purple-500/5 transition-all placeholder:text-purple-300 text-purple-950"
-                  required
-                />
-              </div>
-            </div>
+        {/* FORM */}
+        <form
+          onSubmit={handleLogin}
+          className="space-y-5"
+        >
 
-            {/* PASSWORD */}
-            <div>
+          {/* EMAIL */}
+          <div>
 
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-purple-500/80">
-                  Password
-                </label>
+            <label className="text-xs font-bold uppercase text-purple-500 tracking-wide">
+              Email Address
+            </label>
 
-                <a
-                  href="#forgot"
-                  className="text-xs font-semibold text-purple-600 hover:text-purple-500 transition-colors"
-                >
-                  Forgot?
-                </a>
-              </div>
+            <div className="relative mt-2">
 
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-purple-300">
-                  <Lock className="h-4 w-4" />
-                </span>
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 w-5 h-5" />
 
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full pl-11 pr-12 py-3 bg-purple-50/50 border border-purple-100 rounded-2xl text-sm focus:outline-none focus:border-purple-500 focus:bg-white focus:ring-4 focus:ring-purple-500/5 transition-all placeholder:text-purple-300 text-purple-950"
-                  required
-                />
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-4 text-purple-300 hover:text-purple-500 transition-colors"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* ERROR ALERT */}
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-2xl px-4 py-3 animate-pulse">
-                {error}
-              </div>
-            )}
-
-            {/* Remember Me */}
-            <div className="flex items-center gap-2.5 pt-0.5">
               <input
-                type="checkbox"
-                id="remember"
-                className="h-4 w-4 rounded border-purple-200 text-purple-600 focus:ring-purple-500/30 accent-purple-600"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full h-14 pl-12 pr-4 rounded-2xl bg-purple-50 border border-purple-100 outline-none focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all"
               />
 
-              <label
-                htmlFor="remember"
-                className="text-xs text-purple-400/90 font-medium select-none cursor-pointer"
-              >
-                Keep me signed in
-              </label>
             </div>
 
-            {/* BUTTON */}
-            <button
-              type="submit"
-              disabled={loading || !email || !password}
-              className="w-full group inline-flex items-center justify-center gap-2 py-3.5 mt-2 bg-purple-600 text-white font-medium rounded-2xl hover:bg-purple-500 active:scale-[0.99] transition-all shadow-md shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Signing in...' : 'Sign in'}
+          </div>
 
-              {!loading && (
-                <ArrowRight className="h-4 w-4 text-purple-200 group-hover:translate-x-0.5 transition-transform" />
-              )}
-            </button>
-          </form>
+          {/* PASSWORD */}
+          <div>
 
-          {/* FOOTER */}
-          <p className="text-sm text-center text-purple-400 mt-8 relative z-10">
-            New to the playground?{' '}
+            <label className="text-xs font-bold uppercase text-purple-500 tracking-wide">
+              Password
+            </label>
+
+            <div className="relative mt-2">
+
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 w-5 h-5" />
+
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="w-full h-14 pl-12 pr-14 rounded-2xl bg-purple-50 border border-purple-100 outline-none focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-400"
+              >
+
+                {showPassword ? (
+                  <EyeOff size={20} />
+                ) : (
+                  <Eye size={20} />
+                )}
+
+              </button>
+
+            </div>
+
+          </div>
+
+          {/* ERROR */}
+          {error && (
+
+            <div className="bg-red-50 border border-red-100 text-red-600 text-sm p-4 rounded-2xl">
+              {error}
+            </div>
+
+          )}
+
+          {/* LOGIN BUTTON */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-14 rounded-2xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-purple-300/40 hover:opacity-95 active:scale-[0.99] transition-all disabled:opacity-70"
+          >
+
+            {loading ? "Signing in..." : "Sign In"}
+
+            {!loading && <ArrowRight size={18} />}
+
+          </button>
+
+        </form>
+
+        {/* FOOTER */}
+        <div className="mt-7 text-center">
+
+          <p className="text-sm text-purple-500">
+
+            Don’t have an account?{" "}
+
             <button
-              onClick={() => onNavigate('signup')}
-              className="font-semibold text-purple-600 hover:text-purple-500 transition-colors"
+              onClick={() => onNavigate("signup")}
+              className="text-purple-700 font-semibold"
             >
               Create account
             </button>
-          </p>
-        </div>
-      </div>
 
-      {/* RIGHT SIDE */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-purple-950 items-center justify-center p-12">
-
-        <img
-          src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop"
-          alt="Students laughing together"
-          className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity scale-105"
-        />
-
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-950/95 via-purple-900/90 to-fuchsia-900/50" />
-
-        {/* Glow */}
-        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-fuchsia-500/20 rounded-full blur-3xl" />
-
-        {/* CONTENT */}
-        <div className="relative z-10 max-w-md text-white text-center lg:text-left space-y-6">
-
-          <div className="inline-flex gap-2 items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 text-purple-200">
-            <Flame className="h-4 w-4 text-fuchsia-400" />
-            <span className="text-xs font-semibold tracking-wide uppercase">
-              What's Hot Today
-            </span>
-          </div>
-
-          <h2 className="text-4xl font-extrabold tracking-tight leading-tight">
-            Step back into <br />
-
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-300">
-              the inner circle.
-            </span>
-          </h2>
-
-          <p className="text-purple-200/80 text-sm leading-relaxed">
-            Your peers are talking, voting on memes, sharing test blueprints,
-            and matching up. Log back in so you don't stay out of the loop.
           </p>
 
-          {/* CARDS */}
-          <div className="pt-6 space-y-3">
-
-            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm p-3.5 rounded-2xl border border-white/5 shadow-inner">
-
-              <div className="h-8 w-8 rounded-xl bg-purple-500 flex items-center justify-center text-white shrink-0">
-                <MessageSquare className="h-4 w-4" />
-              </div>
-
-              <p className="text-xs text-purple-100">
-                <strong>Trending:</strong> "The engineering quiz answers got leaked on the main board..."
-                <span className="block text-[10px] text-purple-300 mt-0.5">
-                  🔥 142 students viewing right now
-                </span>
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm p-3.5 rounded-2xl border border-white/5 shadow-inner">
-
-              <div className="h-8 w-8 rounded-xl bg-indigo-500 flex items-center justify-center text-white shrink-0">
-                <GraduationCap className="h-4 w-4" />
-              </div>
-
-              <p className="text-xs text-purple-100">
-                <strong>Academic Help:</strong> Fresh Chemistry past questions uploaded for midterms.
-                <span className="block text-[10px] text-purple-300 mt-0.5">
-                  👍 45 upvotes
-                </span>
-              </p>
-            </div>
-
-          </div>
         </div>
+
       </div>
+
     </div>
   );
 }
