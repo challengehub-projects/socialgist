@@ -1,6 +1,6 @@
 {
   "name": "SocialGist",
-  "short_name": "ScialGist",
+  "short_name": "SocialGist",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
